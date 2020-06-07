@@ -1,57 +1,48 @@
 import React from 'react'
 import Link from 'next/link'
+import { Header, Box } from 'grommet'
+import styled from "styled-components"
 
 const links = [
-  { href: 'https://zeit.co/now', label: 'ZEIT' },
-  { href: 'https://github.com/zeit/next.js', label: 'GitHub' },
-  { href: '/about', label: 'About'}
+  { href: '/about', label: 'About'},
+  { href: '/register', label: 'Register'},
+  { href: '/login', label: 'Sign In'}
 ].map(link => {
   link.key = `nav-link-${link.href}-${link.label}`
   return link
 })
 
-const Nav = () => (
-  <nav>
-    <ul>
-      <li>
-        <Link href='/'>
-          <a>Home</a>
-        </Link>
-      </li>
-      {links.map(({ key, href, label }) => (
-        <li key={key}>
-          <a href={href}>{label}</a>
-        </li>
-      ))}
-    </ul>
+const StyledHeader = styled(Header)`
+  padding: 20px;
+`;
 
-    <style jsx>{`
-      :global(body) {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir,
-          Helvetica, sans-serif;
-      }
-      nav {
-        text-align: center;
-      }
-      ul {
-        display: flex;
-        justify-content: space-between;
-      }
-      nav > ul {
-        padding: 4px 16px;
-      }
-      li {
-        display: flex;
-        padding: 6px 8px;
-      }
-      a {
-        color: #067df7;
-        text-decoration: none;
-        font-size: 13px;
-      }
-    `}</style>
-  </nav>
+const RightDiv = styled(Box)`
+  .rightMenu {
+    flex: 1;
+    padding-right: 20px;
+  }
+`;
+
+const SpecialLink = styled.a`
+  text-decoration: none;
+  color: black;
+`;
+
+const Nav = () => (
+  <StyledHeader background="#f7f7f7">
+    <div direction="row">
+      <Link href='/'>
+        <SpecialLink>Home</SpecialLink>
+      </Link>
+    </div>
+    <RightDiv direction="row" gap="medium">
+      {links.map(({ key, href, label }) => (
+        <Link key={key} href={href}>
+          <SpecialLink>{label}</SpecialLink>
+        </Link>
+      ))}
+    </RightDiv>
+  </StyledHeader>
 )
 
 export default Nav

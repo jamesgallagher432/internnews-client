@@ -19,35 +19,11 @@ const Home = () => (
         </p>
       </Box>
     </Grid>
-    <Grid
-      rows={['small']}
-      columns={['auto', 'auto', 'auto']}
-      gap='medium'
-      fill='horizontal'
-    >
-      <Box border='all' pad='small' margin='small'>
-        <a href='https://nextjs.org/docs' className='card'>
-          <h3>Documentation &rarr;</h3>
-          <p>Learn more about Next.js in the documentation.</p>
-        </a>
+    <Box>
+      <Box>
       </Box>
-      <Box border='all' pad='small' margin='small'>
-        <a href='https://nextjs.org/learn' className='card'>
-          <h3>Next.js Learn &rarr;</h3>
-          <p>Learn about Next.js by following an interactive tutorial!</p>
-        </a>
-      </Box>
-      <Box border='all' pad='small' margin='small'>
-        <a
-          href='https://github.com/zeit/next.js/tree/master/examples'
-          className='card'
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Find other example boilerplates on the Next.js GitHub.</p>
-        </a>
-      </Box>
-    </Grid>
+    </Box>
   </div>
 )
 
-export default Home
+export default Home'
