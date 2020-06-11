@@ -31,7 +31,7 @@ const Nav = () => (
   <StyledHeader background="white">
     <div direction="row">
       <Link href='/'>
-        <SpecialLink>Home</SpecialLink>
+        <SpecialLink>Intern News</SpecialLink>
       </Link>
     </div>
     <RightDiv direction="row" gap="medium">
