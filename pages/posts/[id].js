@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import Head from 'next/head'
 import Nav from '../../components/nav'
 import Link from '../../components/link'
-import { Box, Text, TextArea, Anchor } from 'grommet'
+import { Box, Text, TextArea, Anchor, Button } from 'grommet'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import withApollo from '../../lib/withApollo'
 import { Query } from 'react-apollo'
+import { useRouter } from 'next/router';
+import { Mutation } from 'react-apollo'
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -15,9 +17,18 @@ const MainBox = styled(Box)`
   min-height: 100vh;
 `;
 
+const COMMENT_MUTATION = gql`
+  mutation CommentMutation($linkId: ID!, $description: String!) {
+    createComment(linkId: $linkId, description: $description) {
+      id
+      description
+    }
+  }
+`;
+
 const FEED_QUERY = gql`
-  {
-    allLinks(link: 1) {
+  query Links($link: Int) {
+    allLinks(link: $link) {
       id
       url
       description
@@ -43,8 +54,9 @@ const FEED_QUERY = gql`
 `;
 
 function Post() {
+  const router = useRouter();
   const [comment, setCommentValue] = React.useState('');
-  
+
     return (
       <div>
         <Head>
@@ -53,7 +65,7 @@ function Post() {
         </Head>
         <Nav />
         <MainBox style={{ backgroundColor: "#F0F0F0" }}>
-          <Query query={FEED_QUERY}>
+          <Query query={FEED_QUERY} variables={{ link: parseInt(router.query.id) }}>
             {({ loading, error, data }) => {
               if (loading) return <div>Fetching</div>
               if (error) return <div>Error</div>
@@ -71,7 +83,14 @@ function Post() {
                     onChange={event => setCommentValue(event.target.value)}
                     style={{ width: "50%" }}
                   />
+                  <br />
+                  <Mutation mutation={COMMENT_MUTATION} variables={{ linkId: data.allLinks[0].id, description: comment }}>
+                    {commentMutation => <Button primary onClick={commentMutation} label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
+                  </Mutation>
                   <h4>Comments</h4>
+                  {link.comments.length === 0 && (
+                    <Text>This post has no comments.</Text>
+                  )}
                   {link.comments.map((comment) => {
                     return (
                       <div>

@@ -13,7 +13,7 @@
     "graphql": "^15.0.0",
     "grommet": "^2.7.11",
     "grommet-icons": "^4.3.0",
-    "next": "9.1.1",
+    "next": "9.4.4",
     "next-with-apollo": "^5.0.1",
     "react": "16.11.0",
     "react-apollo": "^3.1.5",
