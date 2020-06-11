@@ -21,7 +21,7 @@ function Home() {
           <link rel='icon' href='/favicon.ico' />
         </Head>
         <Nav />
-        <MainBox style={{ backgroundColor: "lightgray" }}>
+        <MainBox style={{ backgroundColor: "#F0F0F0" }}>
           <LinkList />
         </MainBox>
       </div>

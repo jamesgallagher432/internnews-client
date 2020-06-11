@@ -37,7 +37,7 @@ function Home() {
     return (
       <div>
         <Head>
-          <title>Intern News</title>
+          <title>Login | Intern News</title>
           <link rel='icon' href='/favicon.ico' />
         </Head>
         <Nav />
