@@ -1,29 +1,31 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Head from 'next/head'
 import Nav from '../components/nav'
-import { Grid, Box } from 'grommet'
+import LinkList from '../components/linklist'
+import { Box, Text } from 'grommet'
+import styled from 'styled-components'
+import withApollo from '../lib/withApollo'
 
-const Home = () => (
-  <div>
-    <Head>
-      <title>Home</title>
-      <link rel='icon' href='/favicon.ico' />
-    </Head>
+const MainBox = styled(Box)`
+  padding-top: 20px;
+  padding-left: 5%;
+  padding-right: 5%;
+  min-height: 100vh;
+`;
 
-    <Nav />
-    <Grid rows={['small']} align='center' alignCenter='between' gap='small'>
-      <Box align='center'>
-        <h1 className='title'>Welcome to Next.js!</h1>
-        <p className='description'>
-          To get started, edit <code>pages/index.js</code> and save to reload.
-        </p>
-      </Box>
-    </Grid>
-    <Box>
-      <Box>
-      </Box>
-    </Box>
-  </div>
-)
+function Home() {
+    return (
+      <div>
+        <Head>
+          <title>Intern News</title>
+          <link rel='icon' href='/favicon.ico' />
+        </Head>
+        <Nav />
+        <MainBox style={{ backgroundColor: "lightgray" }}>
+          <LinkList />
+        </MainBox>
+      </div>
+    );
+};
 
-export default Home'
+export default withApollo(Home);

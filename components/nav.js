@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { Header, Box } from 'grommet'
-import styled from "styled-components"
+import styled from 'styled-components'
 
 const links = [
   { href: '/about', label: 'About'},
@@ -24,12 +24,11 @@ const RightDiv = styled(Box)`
 `;
 
 const SpecialLink = styled.a`
-  text-decoration: none;
   color: black;
 `;
 
 const Nav = () => (
-  <StyledHeader background="#f7f7f7">
+  <StyledHeader background="white">
     <div direction="row">
       <Link href='/'>
         <SpecialLink>Home</SpecialLink>
