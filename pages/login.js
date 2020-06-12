@@ -32,7 +32,7 @@ const POST_MUTATION = gql`
 `
 
 function Home() {
-    const [email, setUsername] = React.useState('');
+    const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     return (
       <div>
@@ -48,7 +48,7 @@ function Home() {
               <FormField name="email" htmlfor="email" label="Email">
                 <TextInput id="email" name="email"
                   value={email}
-                  onChange={event => setUsername(event.target.value)}/>
+                  onChange={event => setEmail(event.target.value)}/>
               </FormField>
               <FormField name="password" htmlfor="password" label="Password">
                 <TextInput id="password" name="password" type="password"
