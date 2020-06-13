@@ -15,7 +15,7 @@ const MainBox = styled(Box)`
   padding-right: 5%;
 `;
 
-const FEED_QUERY = gql`
+const NEW_FEED_QUERY = gql`
   {
     allLinks {
       id
@@ -61,15 +61,38 @@ const TOP_FEED_QUERY = gql`
   }
 `;
 
+const BEST_FEED_QUERY = gql`
+  {
+    allLinks(order: "best") {
+      id
+      url
+      description
+      title
+      slug
+      by {
+        id
+        username
+      }
+      upvotes {
+        id
+      }
+      comments {
+        id
+      }
+      createdAt
+    }
+  }
+`;
+
 function LinkList() {
-  const [isTop, setIsTop] = useState("top");
+  const [isTop, setIsTop] = useState("feed");
 
     return (
       <div>
         <div style={{ backgroundColor: "white", padding: 20, borderRadius: 10, marginBottom: 5 }}>
-          View: <Anchor onClick={() => setIsTop("top")} color="gray">Top</Anchor> <Anchor onClick={() => setIsTop("new")} color="gray">New</Anchor>
+          View: <Anchor onClick={() => setIsTop("feed")} color="gray">Feed</Anchor> <Anchor onClick={() => setIsTop("best")} color="gray">Top</Anchor> <Anchor onClick={() => setIsTop("new")} color="gray">New</Anchor>
         </div>
-        {isTop === "top" && (
+        {isTop === "feed" && (
           <Query query={TOP_FEED_QUERY}>
             {({ loading, error, data }) => {
               if (loading) return <div>Fetching</div>
@@ -87,8 +110,26 @@ function LinkList() {
             }}
           </Query>
         )}
+        {isTop === "best" && (
+          <Query query={BEST_FEED_QUERY}>
+            {({ loading, error, data }) => {
+              if (loading) return <div>Fetching</div>
+              if (error) return <div>Error</div>
+
+              const linksToRender = data.allLinks;
+
+              return (
+                <div>
+                  <div style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }}>
+                    {linksToRender.map(link => <Link key={link.id} link={link} />)}
+                  </div>
+                </div>
+              )
+            }}
+          </Query>
+        )}
         {isTop === "new" && (
-          <Query query={FEED_QUERY}>
+          <Query query={NEW_FEED_QUERY}>
             {({ loading, error, data }) => {
               if (loading) return <div>Fetching</div>
               if (error) return <div>Error</div>
