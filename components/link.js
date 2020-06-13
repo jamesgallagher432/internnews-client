@@ -40,7 +40,7 @@ class Link extends Component {
                 </div>
               )}
             </Mutation>
-            <Anchor href={this.props.link.url} color="gray" style={{ paddingRight: 10, paddingBottom: 5 }}>{this.props.link.title}</Anchor> {this.props.link.url}
+            <Anchor href={this.props.link.url ? this.props.link.url : `/posts/${this.props.link.slug}`} color="gray" style={{ paddingRight: 10, paddingBottom: 5 }}>{this.props.link.title}</Anchor> {this.props.link.url && <Text>{this.props.link.url}</Text>}
           </Box>
           <Anchor href={`/user/${this.props.link.by.id}`} color="gray">{this.props.link.by.username}</Anchor> {timeDifferenceForDate(this.props.link.createdAt)} <strong>{this.props.link.comments.length} comments</strong>
         </div>
