@@ -1,16 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import Head from "next/head";
 import Nav from "../../components/nav";
 import Link from "../../components/link";
 import { Box, Text, TextArea, Anchor, Button } from "grommet";
 import styled from "styled-components";
-import gql from "graphql-tag";
 import withApollo from "../../lib/withApollo";
 import { Query } from "react-apollo";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import { Mutation } from "react-apollo";
-import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { parseCookies } from "nookies";
 import Loading from "../../components/loading";
 import USER_QUERY from "../../lib/queries/current_user";
 import CREATE_COMMENT from "../../lib/mutations/create_comment";

@@ -1,14 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
 import LinkList from "../components/linklist";
-import { Box, Text } from "grommet";
+import { Box } from "grommet";
 import styled from "styled-components";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import withApollo from "../lib/withApollo";
-import { useQuery } from "@apollo/react-hooks";
-import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { parseCookies } from "nookies";
 import USER_QUERY from "../lib/queries/current_user";
 
 const MainBox = styled(Box)`

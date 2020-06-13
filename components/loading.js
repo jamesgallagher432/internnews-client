@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import { Box, Text, Anchor } from "grommet";
-import gql from "graphql-tag";
-import withApollo from "../lib/withApollo";
-import { useQuery } from "@apollo/react-hooks";
-import { Mutation } from "react-apollo";
-import { timeDifferenceForDate } from "../lib/utils";
+import { Box } from "grommet";
 import MoonLoader from "react-spinners/MoonLoader";
 
 class Loading extends Component {

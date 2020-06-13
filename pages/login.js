@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
-import LinkList from "../components/linklist";
 import {
   Box,
   Text,
@@ -14,8 +13,7 @@ import {
 import styled from "styled-components";
 import withApollo from "../lib/withApollo";
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
-import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { parseCookies, setCookie } from "nookies";
 import Router from "next/router";
 import SIGN_IN from "../lib/mutations/sign_in_user";
 
@@ -27,9 +25,6 @@ const MainBox = styled(Box)`
 `;
 
 function handleCookie(data) {
-  // Parse
-  const cookies = parseCookies();
-
   // Set
   setCookie(null, "authentication", data.signinUser.token, {
     maxAge: 30 * 24 * 60 * 60,

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Header, Box, Anchor } from "grommet";
 import styled from "styled-components";
-import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { parseCookies, destroyCookie } from "nookies";
 import Router from "next/router";
 
 const StyledHeader = styled(Header)`
@@ -23,8 +23,6 @@ const SpecialLink = styled(Anchor)`
 `;
 
 function Nav({ user }) {
-  const cookies = parseCookies();
-
   return (
     <StyledHeader background="white">
       <div direction="row">

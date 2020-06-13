@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
-import LinkList from "../components/linklist";
 import {
   Box,
   Text,
@@ -14,9 +13,8 @@ import {
 import styled from "styled-components";
 import withApollo from "../lib/withApollo";
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import Router from "next/router";
-import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { parseCookies } from "nookies";
 import SIGN_UP from "../lib/mutations/sign_up";
 
 const MainBox = styled(Box)`

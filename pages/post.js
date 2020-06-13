@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
-import LinkList from "../components/linklist";
 import {
   Box,
   Text,
-  FormField,
   TextInput,
   Button,
-  Anchor,
   Heading,
   TextArea,
 } from "grommet";
@@ -16,8 +13,7 @@ import styled from "styled-components";
 import withApollo from "../lib/withApollo";
 import { Query, Mutation } from "react-apollo";
 import Router from "next/router";
-import gql from "graphql-tag";
-import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { parseCookies } from "nookies";
 import USER_QUERY from "../lib/queries/current_user";
 import CREATE_POST from "../lib/mutations/create_post";
 

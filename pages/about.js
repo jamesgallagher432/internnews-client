@@ -1,23 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
-import LinkList from "../components/linklist";
 import {
   Box,
   Text,
-  FormField,
-  TextInput,
-  Button,
   Anchor,
   Heading,
 } from "grommet";
 import styled from "styled-components";
 import withApollo from "../lib/withApollo";
-import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
-import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { parseCookies } from "nookies";
 import USER_QUERY from "../lib/queries/current_user";
 
 const MainBox = styled(Box)`
@@ -54,7 +47,7 @@ function About() {
           style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }}
           align="left"
         >
-          <Heading level="2">Sign In</Heading>
+          <Heading level="2">About</Heading>
           <Text>
             Intern News is a news aggregator for interns and young people
             interested in tech.

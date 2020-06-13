@@ -1,24 +1,14 @@
 import React, { useState } from "react";
-import Head from "next/head";
-import Nav from "../components/nav";
 import Link from "../components/link";
 import { Box, Text, Anchor } from "grommet";
 import styled from "styled-components";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import withApollo from "../lib/withApollo";
-import { useQuery } from "@apollo/react-hooks";
 import Loading from "./loading";
 import TOP_FEED_QUERY from "../lib/queries/top_feed";
 import BEST_FEED_QUERY from "../lib/queries/best_feed";
 import NEW_FEED_QUERY from "../lib/queries/new_feed";
 import CURRENT_USER from "../lib/queries/current_user";
-
-const MainBox = styled(Box)`
-  padding-top: 20px;
-  padding-left: 5%;
-  padding-right: 5%;
-`;
 
 function LinkList() {
   const [isTop, setIsTop] = useState("feed");
