@@ -7,6 +7,8 @@ import styled from 'styled-components'
 import withApollo from '../lib/withApollo'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import Router from 'next/router'
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -17,7 +19,7 @@ const MainBox = styled(Box)`
 
 const POST_MUTATION = gql`
   mutation SignInUser($email: String!, $password: String!) {
-    signinUser(
+    signinUser (
       credentials: {
         email: $email,
         password: $password
@@ -31,9 +33,22 @@ const POST_MUTATION = gql`
   }
 `
 
+function handleCookie(data) {
+  console.log(data)
+  // Parse
+  const cookies = parseCookies()
+
+  // Set
+  setCookie(null, 'authentication', data.signinUser.token, {
+    maxAge: 30 * 24 * 60 * 60,
+    path: '/',
+  })
+}
+
 function Home() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [error, setError] = React.useState('');
     return (
       <div>
         <Head>
@@ -44,6 +59,9 @@ function Home() {
         <MainBox style={{ backgroundColor: "#F0F0F0" }}>
           <Box style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }} align="center">
             <Heading level="2">Sign In</Heading>
+            {error && (
+              <Text color="red">{error}<br /></Text>
+            )}
             <Box style={{ width: "50%" }}>
               <FormField name="email" htmlfor="email" label="Email">
                 <TextInput id="email" name="email"
@@ -56,8 +74,12 @@ function Home() {
                   onChange={event => setPassword(event.target.value)}/>
               </FormField>
               <Text><Anchor href="/forgot" color="gray">Forgot your password?</Anchor></Text>
-              <Mutation mutation={POST_MUTATION} variables={{ email, password }}>
-                {postMutation => <Button primary onClick={postMutation}label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
+              <Mutation mutation={POST_MUTATION} variables={{ email, password }}
+                onCompleted={data => { handleCookie(data); Router.push('/'); }}
+                onError={(err) => setError(err.graphQLErrors[0].message)}>
+                {postMutation => <Button primary onClick={() => {
+                  postMutation();
+                }} label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
               </Mutation>
             </Box>
             <Text>Don't have an account? <Anchor href="/register" color="gray">Register</Anchor></Text>
