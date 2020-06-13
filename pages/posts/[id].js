@@ -11,6 +11,8 @@ import Router from 'next/router'
 import { useRouter } from 'next/router';
 import { Mutation } from 'react-apollo';
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import Loading from '../../components/loading';
+import USER_QUERY from '../../lib/queries/current_user';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -56,15 +58,6 @@ const FEED_QUERY = gql`
   }
 `;
 
-const USER_QUERY = gql`
-  {
-    currentUser {
-      id
-      username
-    }
-  }
-`;
-
 function Post() {
   const router = useRouter();
   const [comment, setCommentValue] = React.useState('');
@@ -97,7 +90,7 @@ function Post() {
         <MainBox style={{ backgroundColor: "#F0F0F0", paddingBottom: "5%" }}>
           <Query query={FEED_QUERY} variables={{ link: router.query.id }}>
             {({ loading, error, data }) => {
-              if (loading) return <div>Fetching</div>
+              if (loading) return <Loading />
               if (error) return <div>This post does not exist.</div>
 
               const link = data.allLinks[0];

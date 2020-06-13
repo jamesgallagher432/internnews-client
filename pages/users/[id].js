@@ -11,6 +11,8 @@ import { useRouter } from 'next/router';
 import { Mutation } from 'react-apollo';
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import { timeDifferenceForDate } from '../../lib/utils'
+import Loading from '../../components/loading';
+import USER_QUERY from '../../lib/queries/current_user';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -139,17 +141,6 @@ const UPDATE_PROFILE = gql`
   }
 `;
 
-const USER_QUERY = gql`
-  {
-    currentUser {
-      id
-      username
-      email
-      about
-    }
-  }
-`;
-
 function Post() {
   const router = useRouter();
 
@@ -182,7 +173,7 @@ function Post() {
         <MainBox style={{ backgroundColor: "#F0F0F0" }}>
           <Query query={FEED_QUERY} variables={{ user: parseInt(router.query.id) }}>
             {({ loading, error, data }) => {
-              if (loading) return <div>Fetching</div>
+              if (loading) return <Loading />
               if (error) return <div>Error</div>
 
               const user = data.allUsers[0];
@@ -198,7 +189,7 @@ function Post() {
                   about: {user.about}<br />
                   <Query query={USER_QUERY}>
                     {({ loading, error, data }) => {
-                      if (loading) return <div>Fetching</div>
+                      if (loading) return null;
                       if (error) return <div>Error</div>
 
                       const currentUser = data.currentUser[0];

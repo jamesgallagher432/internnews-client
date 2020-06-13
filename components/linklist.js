@@ -8,6 +8,7 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import withApollo from '../lib/withApollo'
 import { useQuery } from '@apollo/react-hooks'
+import Loading from './loading';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -95,7 +96,7 @@ function LinkList() {
         {isTop === "feed" && (
           <Query query={TOP_FEED_QUERY}>
             {({ loading, error, data }) => {
-              if (loading) return <div>Fetching</div>
+              if (loading) return <Loading />
               if (error) return <div>Error</div>
 
               const linksToRender = data.allLinks;
@@ -113,7 +114,7 @@ function LinkList() {
         {isTop === "best" && (
           <Query query={BEST_FEED_QUERY}>
             {({ loading, error, data }) => {
-              if (loading) return <div>Fetching</div>
+              if (loading) return <Loading />
               if (error) return <div>Error</div>
 
               const linksToRender = data.allLinks;
@@ -131,7 +132,7 @@ function LinkList() {
         {isTop === "new" && (
           <Query query={NEW_FEED_QUERY}>
             {({ loading, error, data }) => {
-              if (loading) return <div>Fetching</div>
+              if (loading) return <Loading />
               if (error) return <div>Error</div>
 
               const linksToRender = data.allLinks;
