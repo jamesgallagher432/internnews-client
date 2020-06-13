@@ -12,6 +12,7 @@ import Loading from "./loading";
 import TOP_FEED_QUERY from "../lib/queries/top_feed";
 import BEST_FEED_QUERY from "../lib/queries/best_feed";
 import NEW_FEED_QUERY from "../lib/queries/new_feed";
+import CURRENT_USER from "../lib/queries/current_user";
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -46,93 +47,105 @@ function LinkList() {
           New
         </Anchor>
       </div>
-      {isTop === "feed" && (
-        <Query query={TOP_FEED_QUERY}>
+        <Query query={CURRENT_USER}>
           {({ loading, error, data }) => {
             if (loading) return <Loading />;
-            if (error) return <div>Error</div>;
 
-            const linksToRender = data.allLinks;
+            const currentUser = data.currentUser[0];
 
             return (
               <div>
-                <div
-                  style={{
-                    backgroundColor: "white",
-                    padding: 20,
-                    borderRadius: 10,
+                {isTop === "feed" && (
+                  <Query query={TOP_FEED_QUERY}>
+                    {({ loading, error, data }) => {
+                      if (loading) return <Loading />;
+                      if (error) return <div>Error</div>;
+
+                      const linksToRender = data.allLinks;
+
+                      return (
+                        <div>
+                          <div
+                            style={{
+                              backgroundColor: "white",
+                              padding: 20,
+                              borderRadius: 10,
+                            }}
+                          >
+                            {linksToRender.map((link) => (
+                              <Link key={link.id} link={link} user={currentUser} />
+                            ))}
+                            {linksToRender.length === 0 && (
+                              <Text>There are no links to display.</Text>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    }}
+                  </Query>
+                )}
+                {isTop === "best" && (
+                  <Query query={BEST_FEED_QUERY}>
+                    {({ loading, error, data }) => {
+                      if (loading) return <Loading />;
+                      if (error) return <div>Error</div>;
+
+                      const linksToRender = data.allLinks;
+
+                      return (
+                        <div>
+                          <div
+                            style={{
+                              backgroundColor: "white",
+                              padding: 20,
+                              borderRadius: 10,
+                            }}
+                          >
+                            {linksToRender.map((link) => (
+                              <Link key={link.id} link={link} user={currentUser} />
+                            ))}
+                            {linksToRender.length === 0 && (
+                              <Text>There are no links to display.</Text>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    }}
+                  </Query>
+                )}
+                {isTop === "new" && (
+                <Query query={NEW_FEED_QUERY}>
+                  {({ loading, error, data }) => {
+                    if (loading) return <Loading />;
+                    if (error) return <div>Error</div>;
+
+                    const linksToRender = data.allLinks;
+
+                    return (
+                      <div>
+                        <div
+                          style={{
+                            backgroundColor: "white",
+                            padding: 20,
+                            borderRadius: 10,
+                          }}
+                        >
+                          {linksToRender.map((link) => (
+                            <Link key={link.id} link={link} user={currentUser} />
+                          ))}
+                          {linksToRender.length === 0 && (
+                            <Text>There are no links to display.</Text>
+                          )}
+                        </div>
+                      </div>
+                    );
                   }}
-                >
-                  {linksToRender.map((link) => (
-                    <Link key={link.id} link={link} />
-                  ))}
-                  {linksToRender.length === 0 && (
-                    <Text>There are no links to display.</Text>
-                  )}
-                </div>
+                </Query>
+              )}
               </div>
-            );
+            )
           }}
         </Query>
-      )}
-      {isTop === "best" && (
-        <Query query={BEST_FEED_QUERY}>
-          {({ loading, error, data }) => {
-            if (loading) return <Loading />;
-            if (error) return <div>Error</div>;
-
-            const linksToRender = data.allLinks;
-
-            return (
-              <div>
-                <div
-                  style={{
-                    backgroundColor: "white",
-                    padding: 20,
-                    borderRadius: 10,
-                  }}
-                >
-                  {linksToRender.map((link) => (
-                    <Link key={link.id} link={link} />
-                  ))}
-                  {linksToRender.length === 0 && (
-                    <Text>There are no links to display.</Text>
-                  )}
-                </div>
-              </div>
-            );
-          }}
-        </Query>
-      )}
-      {isTop === "new" && (
-        <Query query={NEW_FEED_QUERY}>
-          {({ loading, error, data }) => {
-            if (loading) return <Loading />;
-            if (error) return <div>Error</div>;
-
-            const linksToRender = data.allLinks;
-
-            return (
-              <div>
-                <div
-                  style={{
-                    backgroundColor: "white",
-                    padding: 20,
-                    borderRadius: 10,
-                  }}
-                >
-                  {linksToRender.map((link) => (
-                    <Link key={link.id} link={link} />
-                  ))}
-                  {linksToRender.length === 0 && (
-                    <Text>There are no links to display.</Text>
-                  )}
-                </div>
-              </div>
-            );
-          }}
-        </Query>
-      )}
     </div>
   );
 }

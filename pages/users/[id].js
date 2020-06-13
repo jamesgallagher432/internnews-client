@@ -25,6 +25,7 @@ import Loading from "../../components/loading";
 import USER_QUERY from "../../lib/queries/current_user";
 import FEED_QUERY from "../../lib/queries/get_user_feed";
 import UPDATE_PROFILE from "../../lib/mutations/update_profile";
+import RESET_PASSWORD from "../../lib/mutations/reset_password";
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -40,6 +41,11 @@ function Post() {
   const [email, setEmail] = React.useState("");
   const [about, setAbout] = React.useState("");
   const [queryError, setQueryError] = React.useState("");
+  const [old_password, setOldPassword] = React.useState("");
+  const [new_password, setNewPassword] = React.useState("");
+  const [show_reset_complete, completeReset] = React.useState("");
+  const [password_error, setPasswordError] = React.useState("");
+  const [showReset, showResetPassword] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
 
   const cookies = parseCookies();
@@ -110,6 +116,79 @@ function Post() {
                       ) {
                         return (
                           <div>
+                            <Anchor
+                              onClick={() => showResetPassword(!showReset)}
+                              color="gray"
+                            >
+                              Reset Password
+                            </Anchor>
+                            <br />
+                            {showReset === true && (
+                              <div>
+                                <Heading level="4">Reset Password</Heading>
+                                {show_reset_complete === true && (
+                                  <Text>Your password has been reset.</Text>
+                                )}
+                                {password_error && (
+                                  <div>
+                                    <Text color="red">{password_error}</Text>
+                                    <br />
+                                  </div>
+                                )}
+                                <TextInput
+                                  id="old_password"
+                                  name="old_password"
+                                  placeholder="Old password"
+                                  type="password"
+                                  value={old_password}
+                                  style={{ width: "50%" }}
+                                  onChange={(event) =>
+                                    setOldPassword(event.target.value)
+                                  }
+                                />
+                                <br />
+                                <TextInput
+                                  id="new_password"
+                                  name="new_password"
+                                  placeholder="New password"
+                                  type="password"
+                                  value={new_password}
+                                  style={{ width: "50%" }}
+                                  onChange={(event) =>
+                                    setNewPassword(event.target.value)
+                                  }
+                                />
+                                <Mutation
+                                  mutation={RESET_PASSWORD}
+                                  variables={{
+                                    oldPassword: old_password,
+                                    newPassword: new_password,
+                                  }}
+                                  onCompleted={(data) => {
+                                    setPasswordError(null);
+                                    completeReset(true);
+                                  }}
+                                  onError={(err) =>
+                                    setPasswordError(
+                                      err.graphQLErrors[0].message
+                                    )
+                                  }
+                                >
+                                  {(resetMutation) => (
+                                    <Button
+                                      primary
+                                      onClick={resetMutation}
+                                      color="accent-3"
+                                      label="Submit"
+                                      style={{
+                                        marginTop: 40,
+                                        marginBottom: 40,
+                                      }}
+                                    />
+                                  )}
+                                </Mutation>
+                              </div>
+                            )}
                             <Heading level="4">Update Profile</Heading>
                             {queryError && (
                               <Text color="red">
@@ -172,33 +251,54 @@ function Post() {
                     }
                   }}
                 </Query>
-                <Tabs justify="start">
-                  <Tab title="Submissions" style={{ paddingBottom: 10 }}>
-                    {user.links.map((link) => (
-                      <Link key={link.id} link={link} />
-                    ))}
-                  </Tab>
-                  <Tab title="Comments" style={{ paddingBottom: 10 }}>
-                    {user.comments.map((comment) => (
-                      <div>
-                        <Anchor href={`/user/${comment.user.id}`} color="gray">
-                          {comment.user.username}
-                        </Anchor>{" "}
-                        {timeDifferenceForDate(comment.createdAt)} on{" "}
-                        <Anchor href={`/posts/${comment.link.id}`} color="gray">
-                          {comment.link.title}
-                        </Anchor>
-                        <br />
-                        {comment.description}
-                      </div>
-                    ))}
-                  </Tab>
-                  <Tab title="Votes" style={{ paddingBottom: 10 }}>
-                    {user.upvotes.map((upvote) => (
-                      <Link link={upvote.link} />
-                    ))}
-                  </Tab>
-                </Tabs>
+                <Query query={USER_QUERY}>
+                  {({ loading, error, data }) => {
+                    if (loading) return <div>Fetching</div>;
+                    if (error) return <div>Error</div>;
+
+                    const currentUser = data.currentUser[0];
+
+                    return (
+                      <Tabs justify="start">
+                        <Tab title="Submissions" style={{ paddingBottom: 10 }}>
+                          {user.links.map((link) => (
+                            <Link
+                              key={link.id}
+                              link={link}
+                              user={currentUser}
+                            />
+                          ))}
+                        </Tab>
+                        <Tab title="Comments" style={{ paddingBottom: 10 }}>
+                          {user.comments.map((comment) => (
+                            <div>
+                              <Anchor
+                                href={`/user/${comment.user.id}`}
+                                color="gray"
+                              >
+                                {comment.user.username}
+                              </Anchor>{" "}
+                              {timeDifferenceForDate(comment.createdAt)} on{" "}
+                              <Anchor
+                                href={`/posts/${comment.link.id}`}
+                                color="gray"
+                              >
+                                {comment.link.title}
+                              </Anchor>
+                              <br />
+                              {comment.description}
+                            </div>
+                          ))}
+                        </Tab>
+                        <Tab title="Votes" style={{ paddingBottom: 10 }}>
+                          {user.upvotes.map((upvote) => (
+                            <Link link={upvote.link} user={currentUser} />
+                          ))}
+                        </Tab>
+                      </Tabs>
+                    );
+                  }}
+                </Query>
               </div>
             );
           }}

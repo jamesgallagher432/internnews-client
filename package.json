@@ -18,6 +18,7 @@
     "next": "9.4.4",
     "next-with-apollo": "^5.0.1",
     "nookies": "^2.3.1",
+    "now": "^19.1.0",
     "react": "16.11.0",
     "react-apollo": "^3.1.5",
     "react-dom": "16.11.0",

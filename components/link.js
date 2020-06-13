@@ -41,11 +41,27 @@ class Link extends Component {
             </Anchor>{" "}
             {this.props.link.url && <Text>{this.props.link.url.replace("https://", "").replace("/", "").replace("www.", "")}</Text>}
           </Box>
-          <Anchor href={`/user/${this.props.link.by.id}`} color="gray">
-            {this.props.link.by.username}
-          </Anchor>{" "}
-          {timeDifferenceForDate(this.props.link.createdAt)}{" "}
-          <strong>{this.props.link.comments.length} comments</strong>{" "}
+          <Box direction="row">
+            <Anchor href={`/user/${this.props.link.by.id}`} color="gray">
+              {this.props.link.by.username} &nbsp;
+            </Anchor>{" "}
+            {timeDifferenceForDate(this.props.link.createdAt)}{" "}&nbsp;
+            <strong>{this.props.link.comments.length} comments &nbsp;</strong>{" "}
+            {this.props.user && (
+              <div>
+                {this.props.link.by.id === this.props.user.id && (
+                  <Mutation
+                    mutation={DELETE_LINK}
+                    variables={{ linkId: this.props.link.id }}
+                  >
+                    {(deleteLink) => (
+                      <Anchor onClick={deleteLink} color="pink">Delete</Anchor>
+                    )}
+                  </Mutation>
+                )}
+              </div>
+          )}
+        </Box>
         </div>
       </div>
     );
