@@ -5,7 +5,8 @@ import LinkList from '../components/linklist'
 import { Box, Text, FormField, TextInput, Button, Anchor, Heading, TextArea } from 'grommet'
 import styled from 'styled-components'
 import withApollo from '../lib/withApollo'
-import { Mutation } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
+import Router from 'next/router'
 import gql from 'graphql-tag'
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 
@@ -24,6 +25,7 @@ const POST_MUTATION = gql`
       title: $title
     ) {
       id
+      slug
     }
   }
 `;
@@ -41,7 +43,9 @@ function Post() {
     const [title, setTitle] = React.useState('');
     const [url, setUrl] = React.useState('');
     const [description, setDescription] = React.useState('');
+    const [error, setError] = React.useState('');
     const cookies = parseCookies()
+
     return (
       <div>
         <Head>
@@ -67,26 +71,26 @@ function Post() {
         <MainBox style={{ backgroundColor: "#F0F0F0" }}>
           <Box style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }} align="center">
             <Heading level="2">Post</Heading>
+            {error && (
+              <Text color="red">{error}<br /></Text>
+            )}
             <Box style={{ width: "50%" }}>
-              <FormField name="title" htmlfor="title" label="Title">
-                <TextInput id="title" name="title"
+                <TextInput id="title" name="title" placeholder="Title"
                   value={title}
                   onChange={event => setTitle(event.target.value)}/>
-              </FormField>
-              <FormField name="url" htmlfor="url" label="URL">
-                <TextInput id="url" name="url"
+                  <br />
+                <TextInput id="url" name="url" placeholder="URL"
                   value={url}
                   onChange={event => setUrl(event.target.value)}/>
-              </FormField>
               <br />
               or
               <br />
-              <FormField name="description" htmlfor="description" label="Description">
-                <TextArea id="description" name="description"
+                <TextArea id="description" name="description" placeholder="Description"
                   value={description}
                   onChange={event => setDescription(event.target.value)}/>
-              </FormField>
-              <Mutation mutation={POST_MUTATION} variables={{ title, url, description }}>
+              <Mutation mutation={POST_MUTATION} variables={{ title, url, description }}
+                onCompleted={data => Router.push(`/posts/${data.createLink.slug}`)}
+                onError={(err) => setError(err.graphQLErrors[0].message)}>
                 {postMutation => <Button primary onClick={postMutation}label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
               </Mutation>
             </Box>
