@@ -6,6 +6,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Mutation } from "react-apollo";
 import { timeDifferenceForDate } from "../lib/utils";
 import CREATE_VOTE from "../lib/mutations/create_vote";
+import DELETE_LINK from "../lib/mutations/delete_link";
 
 class Link extends Component {
   render() {
@@ -44,7 +45,7 @@ class Link extends Component {
             {this.props.link.by.username}
           </Anchor>{" "}
           {timeDifferenceForDate(this.props.link.createdAt)}{" "}
-          <strong>{this.props.link.comments.length} comments</strong>
+          <strong>{this.props.link.comments.length} comments</strong>{" "}
         </div>
       </div>
     );
