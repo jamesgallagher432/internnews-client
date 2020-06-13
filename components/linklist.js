@@ -9,80 +9,14 @@ import gql from "graphql-tag";
 import withApollo from "../lib/withApollo";
 import { useQuery } from "@apollo/react-hooks";
 import Loading from "./loading";
+import TOP_FEED_QUERY from "../lib/queries/top_feed";
+import BEST_FEED_QUERY from "../lib/queries/best_feed";
+import NEW_FEED_QUERY from "../lib/queries/new_feed";
 
 const MainBox = styled(Box)`
   padding-top: 20px;
   padding-left: 5%;
   padding-right: 5%;
-`;
-
-const NEW_FEED_QUERY = gql`
-  {
-    allLinks {
-      id
-      url
-      description
-      title
-      slug
-      by {
-        id
-        username
-      }
-      upvotes {
-        id
-      }
-      comments {
-        id
-      }
-      createdAt
-    }
-  }
-`;
-
-const TOP_FEED_QUERY = gql`
-  {
-    allLinks(order: "top") {
-      id
-      url
-      description
-      title
-      slug
-      by {
-        id
-        username
-      }
-      upvotes {
-        id
-      }
-      comments {
-        id
-      }
-      createdAt
-    }
-  }
-`;
-
-const BEST_FEED_QUERY = gql`
-  {
-    allLinks(order: "best") {
-      id
-      url
-      description
-      title
-      slug
-      by {
-        id
-        username
-      }
-      upvotes {
-        id
-      }
-      comments {
-        id
-      }
-      createdAt
-    }
-  }
 `;
 
 function LinkList() {

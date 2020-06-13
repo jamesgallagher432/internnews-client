@@ -32,10 +32,6 @@ function Post() {
 
   return (
     <div>
-      <Head>
-        <title>Intern News</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       {cookies.authentication ? (
         <Query query={USER_QUERY}>
           {({ loading, error, data }) => {
@@ -66,6 +62,10 @@ function Post() {
                   borderRadius: 10,
                 }}
               >
+                <Head>
+                  <title>{link.title} | Intern News</title>
+                  <link rel="icon" href="/favicon.ico" />
+                </Head>
                 <Link key={link.id} link={link} />
                 <br />
                 <h4>Post a Comment</h4>

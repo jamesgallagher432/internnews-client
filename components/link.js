@@ -5,26 +5,7 @@ import withApollo from "../lib/withApollo";
 import { useQuery } from "@apollo/react-hooks";
 import { Mutation } from "react-apollo";
 import { timeDifferenceForDate } from "../lib/utils";
-
-const VOTE_MUTATION = gql`
-  mutation VoteMutation($linkId: ID!) {
-    createUpvote(linkId: $linkId) {
-      id
-      link {
-        id
-        upvotes {
-          id
-          user {
-            id
-          }
-        }
-      }
-      user {
-        id
-      }
-    }
-  }
-`;
+import CREATE_VOTE from "../lib/mutations/create_vote";
 
 class Link extends Component {
   render() {
@@ -33,7 +14,7 @@ class Link extends Component {
         <div style={{ paddingTop: 10, paddingBottom: 10 }}>
           <Box direction="row">
             <Mutation
-              mutation={VOTE_MUTATION}
+              mutation={CREATE_VOTE}
               variables={{ linkId: this.props.link.id }}
             >
               {(voteMutation) => (
