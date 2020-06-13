@@ -33,13 +33,14 @@ const FEED_QUERY = gql`
       comments {
         id
       }
+      createdAt
     }
   }
 `;
 
 const TOP_FEED_QUERY = gql`
   {
-    allLinks {
+    allLinks(order: "top") {
       id
       url
       description
@@ -55,6 +56,7 @@ const TOP_FEED_QUERY = gql`
       comments {
         id
       }
+      createdAt
     }
   }
 `;
@@ -65,7 +67,7 @@ function LinkList() {
     return (
       <div>
         <div style={{ backgroundColor: "white", padding: 20, borderRadius: 10, marginBottom: 5 }}>
-          View: <Anchor onClick={() => setIsTop("top")}>Top</Anchor> <Anchor onClick={() => setIsTop("new")}>New</Anchor>
+          View: <Anchor onClick={() => setIsTop("top")} color="gray">Top</Anchor> <Anchor onClick={() => setIsTop("new")} color="gray">New</Anchor>
         </div>
         {isTop === "top" && (
           <Query query={TOP_FEED_QUERY}>

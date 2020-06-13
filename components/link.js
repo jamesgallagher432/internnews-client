@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import withApollo from '../lib/withApollo'
 import { useQuery } from '@apollo/react-hooks'
 import { Mutation } from 'react-apollo'
+import { timeDifferenceForDate } from '../lib/utils'
 
 const VOTE_MUTATION = gql`
   mutation VoteMutation($linkId: ID!) {
@@ -39,9 +40,9 @@ class Link extends Component {
                 </div>
               )}
             </Mutation>
-            <Anchor href={this.props.link.url} color="gray" style={{ paddingRight: 10 }}>{this.props.link.title}</Anchor> {this.props.link.url}<br />
+            <Anchor href={this.props.link.url} color="gray" style={{ paddingRight: 10, paddingBottom: 5 }}>{this.props.link.title}</Anchor> {this.props.link.url}
           </Box>
-          <Anchor href={`/user/${this.props.link.by.id}`} color="gray">{this.props.link.by.username}</Anchor> 1 day ago <strong>{this.props.link.comments.length} comments</strong>
+          <Anchor href={`/user/${this.props.link.by.id}`} color="gray">{this.props.link.by.username}</Anchor> {timeDifferenceForDate(this.props.link.createdAt)} <strong>{this.props.link.comments.length} comments</strong>
         </div>
       </div>
     )
