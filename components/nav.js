@@ -5,15 +5,6 @@ import styled from "styled-components";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import Router from "next/router";
 
-const links = [
-  { href: "/about", label: "About" },
-  { href: "/register", label: "Register" },
-  { href: "/login", label: "Sign In" },
-].map((link) => {
-  link.key = `nav-link-${link.href}-${link.label}`;
-  return link;
-});
-
 const StyledHeader = styled(Header)`
   padding: 20px;
 `;
@@ -54,11 +45,15 @@ function Nav({ user }) {
       <RightDiv direction="row" gap="medium">
         {!user ? (
           <div>
-            {links.map(({ key, href, label }) => (
-              <Link key={key} href={href}>
-                <SpecialLink>{label}</SpecialLink>
-              </Link>
-            ))}
+            <Link href={`/about`}>
+              <SpecialLink>About</SpecialLink>
+            </Link>
+            <Link href={`/register`}>
+              <SpecialLink>Register</SpecialLink>
+            </Link>
+            <Link href={`/login`}>
+              <SpecialLink>Login</SpecialLink>
+            </Link>
           </div>
         ) : (
           <div gap="medium">
