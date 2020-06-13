@@ -53,6 +53,7 @@ function Nav({ user }) {
         ) : (
           <div gap="medium">
             <Link href={`/users/${user.id}`}><SpecialLink>{user.username}</SpecialLink></Link>
+            <Link href={`/about`}><SpecialLink>About</SpecialLink></Link>
             <Anchor style={{ fontWeight: 400, color: "black" }} onClick={() => { destroyCookie(null, 'authentication'); Router.push('/') }}>Logout</Anchor>
           </div>
         )}
