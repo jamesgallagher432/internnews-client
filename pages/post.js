@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import withApollo from '../lib/withApollo'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -25,19 +26,44 @@ const POST_MUTATION = gql`
       id
     }
   }
-`
+`;
+
+const USER_QUERY = gql`
+  {
+    currentUser {
+      id
+      username
+    }
+  }
+`;
 
 function Post() {
     const [title, setTitle] = React.useState('');
     const [url, setUrl] = React.useState('');
     const [description, setDescription] = React.useState('');
+    const cookies = parseCookies()
     return (
       <div>
         <Head>
           <title>Post | Intern News</title>
           <link rel='icon' href='/favicon.ico' />
         </Head>
-        <Nav />
+        {cookies.authentication ? (
+          <Query query={USER_QUERY}>
+            {({ loading, error, data }) => {
+              if (loading) return <div>Fetching</div>
+              if (error) return <div>Error</div>
+
+              const currentUser = data.currentUser[0];
+
+              return (
+                <Nav user={currentUser} />
+              )
+            }}
+          </Query>
+        ) : (
+          <Nav />
+        )}
         <MainBox style={{ backgroundColor: "#F0F0F0" }}>
           <Box style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }} align="center">
             <Heading level="2">Post</Heading>
