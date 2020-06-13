@@ -40,6 +40,8 @@ function Nav({ user }) {
         <Link href='/'>
           <SpecialLink>Intern News</SpecialLink>
         </Link>
+        {user && ( <Link href={`/about`}><SpecialLink>About</SpecialLink></Link>)}
+        {user && ( <Link href={`/post`}><SpecialLink>Post</SpecialLink></Link>)}
       </div>
       <RightDiv direction="row" gap="medium">
         {!user ? (
@@ -53,7 +55,6 @@ function Nav({ user }) {
         ) : (
           <div gap="medium">
             <Link href={`/users/${user.id}`}><SpecialLink>{user.username}</SpecialLink></Link>
-            <Link href={`/about`}><SpecialLink>About</SpecialLink></Link>
             <Anchor style={{ fontWeight: 400, color: "black" }} onClick={() => { destroyCookie(null, 'authentication'); Router.push('/') }}>Logout</Anchor>
           </div>
         )}
