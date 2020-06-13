@@ -1,18 +1,18 @@
-import React from 'react'
-import Link from 'next/link'
-import { Header, Box, Anchor } from 'grommet'
-import styled from 'styled-components'
-import { parseCookies, setCookie, destroyCookie } from 'nookies'
-import Router from 'next/router'
+import React from "react";
+import Link from "next/link";
+import { Header, Box, Anchor } from "grommet";
+import styled from "styled-components";
+import { parseCookies, setCookie, destroyCookie } from "nookies";
+import Router from "next/router";
 
 const links = [
-  { href: '/about', label: 'About'},
-  { href: '/register', label: 'Register'},
-  { href: '/login', label: 'Sign In'}
-].map(link => {
-  link.key = `nav-link-${link.href}-${link.label}`
-  return link
-})
+  { href: "/about", label: "About" },
+  { href: "/register", label: "Register" },
+  { href: "/login", label: "Sign In" },
+].map((link) => {
+  link.key = `nav-link-${link.href}-${link.label}`;
+  return link;
+});
 
 const StyledHeader = styled(Header)`
   padding: 20px;
@@ -37,11 +37,19 @@ function Nav({ user }) {
   return (
     <StyledHeader background="white">
       <div direction="row">
-        <Link href='/'>
+        <Link href="/">
           <SpecialLink>Intern News</SpecialLink>
         </Link>
-        {user && ( <Link href={`/about`}><SpecialLink>About</SpecialLink></Link>)}
-        {user && ( <Link href={`/post`}><SpecialLink>Post</SpecialLink></Link>)}
+        {user && (
+          <Link href={`/about`}>
+            <SpecialLink>About</SpecialLink>
+          </Link>
+        )}
+        {user && (
+          <Link href={`/post`}>
+            <SpecialLink>Post</SpecialLink>
+          </Link>
+        )}
       </div>
       <RightDiv direction="row" gap="medium">
         {!user ? (
@@ -54,13 +62,23 @@ function Nav({ user }) {
           </div>
         ) : (
           <div gap="medium">
-            <Link href={`/users/${user.id}`}><SpecialLink>{user.username}</SpecialLink></Link>
-            <Anchor style={{ fontWeight: 400, color: "black" }} onClick={() => { destroyCookie(null, 'authentication'); Router.push('/') }}>Logout</Anchor>
+            <Link href={`/users/${user.id}`}>
+              <SpecialLink>{user.username}</SpecialLink>
+            </Link>
+            <Anchor
+              style={{ fontWeight: 400, color: "black" }}
+              onClick={() => {
+                destroyCookie(null, "authentication");
+                Router.push("/");
+              }}
+            >
+              Logout
+            </Anchor>
           </div>
         )}
       </RightDiv>
     </StyledHeader>
-  )
+  );
 }
 
-export default Nav
+export default Nav;
