@@ -8,7 +8,8 @@ import gql from 'graphql-tag'
 import withApollo from '../../lib/withApollo'
 import { Query } from 'react-apollo'
 import { useRouter } from 'next/router';
-import { Mutation } from 'react-apollo'
+import { Mutation } from 'react-apollo';
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -127,15 +128,45 @@ const UPDATE_PROFILE = gql`
   }
 `;
 
+const USER_QUERY = gql`
+  {
+    currentUser {
+      id
+      username
+      email
+      about
+    }
+  }
+`;
+
 function Post() {
   const router = useRouter();
-  const [username, setUsername] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [about, setAbout] = React.useState('');
+
+  const key = Math.random();
+
+  const [username, setUsername] = React.useState(key);
+  const [email, setEmail] = React.useState(key);
+  const [about, setAbout] = React.useState(key);
+  const cookies = parseCookies()
 
     return (
       <div>
-        <Nav />
+        {cookies.authentication ? (
+          <Query query={USER_QUERY}>
+            {({ loading, error, data }) => {
+              if (loading) return <div>Fetching</div>
+              if (error) return <div>Error</div>
+
+              const currentUser = data.currentUser[0];
+
+              return (
+                <Nav user={currentUser} />
+              )
+            }}
+          </Query>
+        ) : (
+          <Nav />
+        )}
         <MainBox style={{ backgroundColor: "#F0F0F0" }}>
           <Query query={FEED_QUERY} variables={{ user: parseInt(router.query.id) }}>
             {({ loading, error, data }) => {
@@ -153,27 +184,60 @@ function Post() {
                   user: {user.username}<br />
                   email: {user.email}<br />
                   about: {user.about}<br />
-                  <TextInput id="username" name="username" placeholder="Username"
-                    value={username}
-                    style={{ width: "50%" }}
-                    onChange={event => setUsername(event.target.value)}/>
-                  <br />
-                  <TextInput id="email" name="email" placeholder="Email"
-                    value={email}
-                    style={{ width: "50%" }}
-                    onChange={event => setEmail(event.target.value)}/>
-                  <br />
-                  <TextArea
-                    placeholder="About"
-                    value={about}
-                    onChange={event => setAbout(event.target.value)}
-                    style={{ width: "50%" }}
-                  />
-                  <br />
-                  <Mutation mutation={UPDATE_PROFILE} variables={{ username, email, about }}>
-                    {commentMutation => <Button primary onClick={commentMutation} label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
-                  </Mutation>
-                  <br /><br />
+                  <Query query={USER_QUERY}>
+                    {({ loading, error, data }) => {
+                      if (loading) return <div>Fetching</div>
+                      if (error) return <div>Error</div>
+
+                      const currentUser = data.currentUser[0];
+
+                      if (currentUser) {
+                        if (username === key) {
+                          setUsername(currentUser.username)
+                        }
+
+                        if (email === key) {
+                          setEmail(currentUser.email)
+                        }
+
+                        if (about === key) {
+                          setAbout(currentUser.about)
+                        }
+
+                        if (parseInt(currentUser.id) === parseInt(router.query.id)) {
+                          return (
+                            <div>
+                              <TextInput id="username" name="username" placeholder="Username"
+                                value={username}
+                                style={{ width: "50%" }}
+                                onChange={event => setUsername(event.target.value)}/>
+                              <br />
+                              <TextInput id="email" name="email" placeholder="Email"
+                                value={email}
+                                style={{ width: "50%" }}
+                                onChange={event => setEmail(event.target.value)}/>
+                              <br />
+                              <TextArea
+                                placeholder="About"
+                                value={about}
+                                onChange={event => setAbout(event.target.value)}
+                                style={{ width: "50%" }}
+                              />
+                              <br />
+                              <Mutation mutation={UPDATE_PROFILE} variables={{ username, email, about }}>
+                                {commentMutation => <Button primary onClick={commentMutation} label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
+                              </Mutation>
+                              <br /><br />
+                            </div>
+                          )
+                        } else {
+                          return null;
+                        }
+                      } else {
+                        return null;
+                      }
+                    }}
+                  </Query>
                   <Tabs justify="start">
                     <Tab title="Submissions">
                       {user.links.map((link) => <Link key={link.id} link={link} />)}

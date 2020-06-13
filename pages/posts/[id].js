@@ -8,7 +8,8 @@ import gql from 'graphql-tag'
 import withApollo from '../../lib/withApollo'
 import { Query } from 'react-apollo'
 import { useRouter } from 'next/router';
-import { Mutation } from 'react-apollo'
+import { Mutation } from 'react-apollo';
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -53,9 +54,19 @@ const FEED_QUERY = gql`
   }
 `;
 
+const USER_QUERY = gql`
+  {
+    currentUser {
+      id
+      username
+    }
+  }
+`;
+
 function Post() {
   const router = useRouter();
   const [comment, setCommentValue] = React.useState('');
+  const cookies = parseCookies()
 
     return (
       <div>
@@ -63,7 +74,22 @@ function Post() {
           <title>Intern News</title>
           <link rel='icon' href='/favicon.ico' />
         </Head>
-        <Nav />
+        {cookies.authentication ? (
+          <Query query={USER_QUERY}>
+            {({ loading, error, data }) => {
+              if (loading) return <div>Fetching</div>
+              if (error) return <div>Error</div>
+
+              const currentUser = data.currentUser[0];
+
+              return (
+                <Nav user={currentUser} />
+              )
+            }}
+          </Query>
+        ) : (
+          <Nav />
+        )}
         <MainBox style={{ backgroundColor: "#F0F0F0" }}>
           <Query query={FEED_QUERY} variables={{ link: parseInt(router.query.id) }}>
             {({ loading, error, data }) => {
@@ -84,9 +110,13 @@ function Post() {
                     style={{ width: "50%" }}
                   />
                   <br />
-                  <Mutation mutation={COMMENT_MUTATION} variables={{ linkId: data.allLinks[0].id, description: comment }}>
-                    {commentMutation => <Button primary onClick={commentMutation} label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
-                  </Mutation>
+                  {cookies.authentication ? (
+                    <Mutation mutation={COMMENT_MUTATION} variables={{ linkId: data.allLinks[0].id, description: comment }}>
+                      {commentMutation => <Button primary onClick={commentMutation} label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
+                    </Mutation>
+                  ) : (
+                    <Text>Please sign in to comment</Text>
+                  )}
                   <h4>Comments</h4>
                   {link.comments.length === 0 && (
                     <Text>This post has no comments.</Text>
