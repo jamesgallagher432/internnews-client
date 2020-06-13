@@ -38,7 +38,7 @@ class Link extends Component {
             >
               {this.props.link.title}
             </Anchor>{" "}
-            {this.props.link.url && <Text>{this.props.link.url}</Text>}
+            {this.props.link.url && <Text>{this.props.link.url.replace("https://", "").replace("/", "").replace("www.", "")}</Text>}
           </Box>
           <Anchor href={`/user/${this.props.link.by.id}`} color="gray">
             {this.props.link.by.username}

@@ -38,7 +38,7 @@ function Nav({ user }) {
     <StyledHeader background="white">
       <div direction="row">
         <Link href="/">
-          <SpecialLink>Intern News</SpecialLink>
+          <Anchor style={{ marginRight: 20 }} color="blue">Intern News</Anchor>
         </Link>
         {user && (
           <Link href={`/about`}>

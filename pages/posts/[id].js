@@ -35,7 +35,7 @@ function Post() {
       {cookies.authentication ? (
         <Query query={USER_QUERY}>
           {({ loading, error, data }) => {
-            if (loading) return <div>Fetching</div>;
+            if (loading) return null;
             if (error) return <div>Error</div>;
 
             const currentUser = data.currentUser[0];
@@ -84,7 +84,7 @@ function Post() {
                 <br />
                 {cookies.authentication ? (
                   <Mutation
-                    mutation={COMMENT_MUTATION}
+                    mutation={CREATE_COMMENT}
                     variables={{
                       linkId: data.allLinks[0].id,
                       description: comment,
@@ -100,6 +100,7 @@ function Post() {
                       <Button
                         primary
                         onClick={commentMutation}
+                        color="accent-3"
                         label="Submit"
                         style={{ marginTop: 10, marginBottom: 10 }}
                       />

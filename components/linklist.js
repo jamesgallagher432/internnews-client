@@ -27,16 +27,19 @@ function LinkList() {
       <div
         style={{
           backgroundColor: "white",
-          padding: 20,
+          paddingTop: 20,
+          paddingBottom: 20,
+          paddingLeft: 20,
+          paddingRight: 25,
           borderRadius: 10,
-          marginBottom: 5,
+          marginBottom: 5
         }}
       >
         View:{" "}
-        <Anchor onClick={() => setIsTop("feed")} color="gray">
+        <Anchor onClick={() => setIsTop("feed")} color="gray" style={{ paddingRight: 5 }}>
           Feed
         </Anchor>{" "}
-        <Anchor onClick={() => setIsTop("best")} color="gray">
+        <Anchor onClick={() => setIsTop("best")} color="gray" style={{ paddingRight: 5 }}>
           Top
         </Anchor>{" "}
         <Anchor onClick={() => setIsTop("new")} color="gray">
@@ -63,6 +66,9 @@ function LinkList() {
                   {linksToRender.map((link) => (
                     <Link key={link.id} link={link} />
                   ))}
+                  {linksToRender.length === 0 && (
+                    <Text>There are no links to display.</Text>
+                  )}
                 </div>
               </div>
             );
@@ -89,6 +95,9 @@ function LinkList() {
                   {linksToRender.map((link) => (
                     <Link key={link.id} link={link} />
                   ))}
+                  {linksToRender.length === 0 && (
+                    <Text>There are no links to display.</Text>
+                  )}
                 </div>
               </div>
             );
@@ -115,6 +124,9 @@ function LinkList() {
                   {linksToRender.map((link) => (
                     <Link key={link.id} link={link} />
                   ))}
+                  {linksToRender.length === 0 && (
+                    <Text>There are no links to display.</Text>
+                  )}
                 </div>
               </div>
             );

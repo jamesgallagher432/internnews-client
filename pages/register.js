@@ -45,7 +45,7 @@ function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Nav />
-      <MainBox style={{ backgroundColor: "#F0F0F0" }}>
+      <MainBox style={{ backgroundColor: "#F0F0F0", paddingBottom: "5%" }}>
         <Box
           style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }}
           align="center"
@@ -94,6 +94,7 @@ function Home() {
                   primary
                   onClick={postMutation}
                   label="Submit"
+                  color="accent-3"
                   style={{ marginTop: 40, marginBottom: 40 }}
                 />
               )}

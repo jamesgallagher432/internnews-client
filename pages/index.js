@@ -40,7 +40,7 @@ function Home() {
       ) : (
         <Nav />
       )}
-      <MainBox style={{ backgroundColor: "#F0F0F0" }}>
+      <MainBox style={{ backgroundColor: "#F0F0F0", paddingBottom: "5%" }}>
         <LinkList />
       </MainBox>
     </div>

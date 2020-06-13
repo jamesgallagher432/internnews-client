@@ -60,7 +60,7 @@ function Post() {
       ) : (
         <Nav />
       )}
-      <MainBox style={{ backgroundColor: "#F0F0F0" }}>
+      <MainBox style={{ backgroundColor: "#F0F0F0", paddingBottom: "5%" }}>
         <Query
           query={FEED_QUERY}
           variables={{ user: parseInt(router.query.id) }}
@@ -156,6 +156,7 @@ function Post() {
                                 <Button
                                   primary
                                   onClick={commentMutation}
+                                  color="accent-3"
                                   label="Submit"
                                   style={{ marginTop: 40, marginBottom: 40 }}
                                 />

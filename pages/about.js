@@ -49,7 +49,7 @@ function About() {
       ) : (
         <Nav />
       )}
-      <MainBox style={{ backgroundColor: "#F0F0F0" }}>
+      <MainBox style={{ backgroundColor: "#F0F0F0", paddingBottom: "5%" }}>
         <Box
           style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }}
           align="left"
