@@ -9,6 +9,7 @@ import { Query, Mutation } from 'react-apollo'
 import Router from 'next/router'
 import gql from 'graphql-tag'
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import USER_QUERY from '../lib/queries/current_user';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -30,15 +31,6 @@ const POST_MUTATION = gql`
   }
 `;
 
-const USER_QUERY = gql`
-  {
-    currentUser {
-      id
-      username
-    }
-  }
-`;
-
 function Post() {
     const [title, setTitle] = React.useState('');
     const [url, setUrl] = React.useState('');
@@ -55,7 +47,7 @@ function Post() {
         {cookies.authentication ? (
           <Query query={USER_QUERY}>
             {({ loading, error, data }) => {
-              if (loading) return <div>Fetching</div>
+              if (loading) return null;
               if (error) return <div>Error</div>
 
               const currentUser = data.currentUser[0];
@@ -91,10 +83,9 @@ function Post() {
               <Mutation mutation={POST_MUTATION} variables={{ title, url, description }}
                 onCompleted={data => Router.push(`/posts/${data.createLink.slug}`)}
                 onError={(err) => setError(err.graphQLErrors[0].message)}>
-                {postMutation => <Button primary onClick={postMutation}label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
+                {postMutation => <Button primary onClick={postMutation}label="Create Post" style={{ marginTop: 40, marginBottom: 40 }}/>}
               </Mutation>
             </Box>
-            <Text>Don't have an account? <Anchor href="/register" color="gray">Register</Anchor></Text>
           </Box>
           </MainBox>
       </div>

@@ -9,21 +9,13 @@ import gql from 'graphql-tag'
 import withApollo from '../lib/withApollo'
 import { useQuery } from '@apollo/react-hooks'
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import USER_QUERY from '../lib/queries/current_user';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
   padding-left: 5%;
   padding-right: 5%;
   min-height: 100vh;
-`;
-
-const USER_QUERY = gql`
-  {
-    currentUser {
-      id
-      username
-    }
-  }
 `;
 
 function Home() {
