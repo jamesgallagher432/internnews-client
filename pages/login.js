@@ -38,7 +38,7 @@ function handleCookie(data) {
 }
 
 function Home() {
-  const [email, setEmail] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   return (
@@ -61,12 +61,12 @@ function Home() {
             </Text>
           )}
           <Box style={{ width: "50%" }}>
-            <FormField name="email" htmlfor="email" label="Email">
+            <FormField name="username" htmlfor="username" label="Username">
               <TextInput
-                id="email"
-                name="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                id="username"
+                name="username"
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
               />
             </FormField>
             <FormField name="password" htmlfor="password" label="Password">
@@ -85,7 +85,7 @@ function Home() {
             </Text>
             <Mutation
               mutation={SIGN_IN}
-              variables={{ email, password }}
+              variables={{ username, password }}
               onCompleted={(data) => {
                 handleCookie(data);
                 Router.push("/");
