@@ -7,6 +7,8 @@ import styled from 'styled-components'
 import withApollo from '../lib/withApollo'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
+import Router from 'next/router'
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -35,6 +37,14 @@ function Home() {
     const [username, setUsername] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [error, setError] = React.useState('');
+
+    const cookies = parseCookies();
+
+    if (cookies.authentication) {
+      Router.push('/')
+    }
+
     return (
       <div>
         <Head>
@@ -45,6 +55,9 @@ function Home() {
         <MainBox style={{ backgroundColor: "#F0F0F0" }}>
           <Box style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }} align="center">
             <Heading level="2">Register</Heading>
+            {error && (
+              <Text color="red">{error}<br /></Text>
+            )}
             <Box style={{ width: "50%" }}>
               <FormField name="username" htmlfor="username" label="Username">
                 <TextInput id="username" name="username"
@@ -61,7 +74,9 @@ function Home() {
                   value={password}
                   onChange={event => setPassword(event.target.value)}/>
               </FormField>
-              <Mutation mutation={POST_MUTATION} variables={{ username, email, password }}>
+              <Mutation mutation={POST_MUTATION} variables={{ username, email, password }}
+                onCompleted={data => Router.push('/login')}
+                onError={(err) => setError(err.graphQLErrors[0].message)}>
                 {postMutation => <Button primary onClick={postMutation}label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
               </Mutation>
             </Box>
