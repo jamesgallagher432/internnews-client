@@ -10,6 +10,7 @@ import { Query } from 'react-apollo'
 import { useRouter } from 'next/router';
 import { Mutation } from 'react-apollo';
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { timeDifferenceForDate } from '../../lib/utils'
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -41,6 +42,7 @@ const FEED_QUERY = gql`
         upvotes {
           id
         }
+        createdAt
       }
       comments {
         id
@@ -49,6 +51,11 @@ const FEED_QUERY = gql`
           id
           username
         }
+        link {
+          id
+          title
+        }
+        createdAt
       }
       upvotes {
         id
@@ -67,6 +74,7 @@ const FEED_QUERY = gql`
           upvotes {
             id
           }
+          createdAt
         }
       }
     }
@@ -96,6 +104,7 @@ const UPDATE_PROFILE = gql`
         upvotes {
           id
         }
+        createdAt
       }
       comments {
         id
@@ -104,6 +113,7 @@ const UPDATE_PROFILE = gql`
           id
           username
         }
+        createdAt
       }
       upvotes {
         id
@@ -122,6 +132,7 @@ const UPDATE_PROFILE = gql`
           upvotes {
             id
           }
+          createdAt
         }
       }
     }
@@ -142,11 +153,12 @@ const USER_QUERY = gql`
 function Post() {
   const router = useRouter();
 
-  const key = Math.random();
+  const [username, setUsername] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [about, setAbout] = React.useState('');
+  const [queryError, setQueryError] = React.useState('');
+  const [loaded, setLoaded] = React.useState(false);
 
-  const [username, setUsername] = React.useState(key);
-  const [email, setEmail] = React.useState(key);
-  const [about, setAbout] = React.useState(key);
   const cookies = parseCookies()
 
     return (
@@ -192,21 +204,20 @@ function Post() {
                       const currentUser = data.currentUser[0];
 
                       if (currentUser) {
-                        if (username === key) {
+                        if (loaded === false) {
                           setUsername(currentUser.username)
-                        }
-
-                        if (email === key) {
                           setEmail(currentUser.email)
-                        }
-
-                        if (about === key) {
                           setAbout(currentUser.about)
                         }
+                        setLoaded(true)
 
                         if (parseInt(currentUser.id) === parseInt(router.query.id)) {
                           return (
                             <div>
+                              <Heading level="4">Update Profile</Heading>
+                              {queryError && (
+                                <Text color="red">{queryError}<br /></Text>
+                              )}
                               <TextInput id="username" name="username" placeholder="Username"
                                 value={username}
                                 style={{ width: "50%" }}
@@ -224,10 +235,11 @@ function Post() {
                                 style={{ width: "50%" }}
                               />
                               <br />
-                              <Mutation mutation={UPDATE_PROFILE} variables={{ username, email, about }}>
+                              <Mutation mutation={UPDATE_PROFILE} variables={{ username, email, about }}
+                                onCompleted={data => setQueryError(null)}
+                                onError={(err) => setQueryError(err.graphQLErrors[0].message)}>
                                 {commentMutation => <Button primary onClick={commentMutation} label="Submit" style={{ marginTop: 40, marginBottom: 40 }}/>}
                               </Mutation>
-                              <br /><br />
                             </div>
                           )
                         } else {
@@ -239,18 +251,18 @@ function Post() {
                     }}
                   </Query>
                   <Tabs justify="start">
-                    <Tab title="Submissions">
+                    <Tab title="Submissions" style={{ paddingBottom: 10 }}>
                       {user.links.map((link) => <Link key={link.id} link={link} />)}
                     </Tab>
-                    <Tab title="Comments">
+                    <Tab title="Comments" style={{ paddingBottom: 10 }}>
                       {user.comments.map((comment) =>
                         <div>
-                          <Anchor href={`/user/${comment.user.id}`} color="gray">{comment.user.username}</Anchor> 1 day ago on Post Name<br />
+                          <Anchor href={`/user/${comment.user.id}`} color="gray">{comment.user.username}</Anchor> {timeDifferenceForDate(comment.createdAt)} on <Anchor href={`/posts/${comment.link.id}`} color="gray">{comment.link.title}</Anchor><br />
                           {comment.description}
                         </div>
                       )}
                     </Tab>
-                    <Tab title="Votes">
+                    <Tab title="Votes" style={{ paddingBottom: 10 }}>
                       {user.upvotes.map((upvote) => <Link link={upvote.link} />)}
                     </Tab>
                   </Tabs>
