@@ -13,49 +13,14 @@ import { Mutation } from 'react-apollo';
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import Loading from '../../components/loading';
 import USER_QUERY from '../../lib/queries/current_user';
+import CREATE_COMMENT from '../../lib/mutations/create_comment';
+import FEED_QUERY from '../../lib/queries/get_feed';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
   padding-left: 5%;
   padding-right: 5%;
   min-height: 100vh;
-`;
-
-const COMMENT_MUTATION = gql`
-  mutation CommentMutation($linkId: ID!, $description: String!) {
-    createComment(linkId: $linkId, description: $description) {
-      id
-      description
-    }
-  }
-`;
-
-const FEED_QUERY = gql`
-  query Links($link: String) {
-    allLinks(link: $link) {
-      id
-      url
-      description
-      title
-      slug
-      by {
-        id
-        username
-      }
-      upvotes {
-        id
-      }
-      comments {
-        id
-        user {
-          id
-          username
-        }
-        description
-      }
-      createdAt
-    }
-  }
 `;
 
 function Post() {

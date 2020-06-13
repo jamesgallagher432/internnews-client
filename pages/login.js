@@ -9,6 +9,7 @@ import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import Router from 'next/router'
+import SIGN_IN from '../lib/mutations/sign_in_user';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -17,24 +18,7 @@ const MainBox = styled(Box)`
   min-height: 100vh;
 `;
 
-const POST_MUTATION = gql`
-  mutation SignInUser($email: String!, $password: String!) {
-    signinUser (
-      credentials: {
-        email: $email,
-        password: $password
-      }
-    ) {
-      token
-      user {
-        id
-      }
-    }
-  }
-`
-
 function handleCookie(data) {
-  console.log(data)
   // Parse
   const cookies = parseCookies()
 
@@ -74,7 +58,7 @@ function Home() {
                   onChange={event => setPassword(event.target.value)}/>
               </FormField>
               <Text><Anchor href="/forgot" color="gray">Forgot your password?</Anchor></Text>
-              <Mutation mutation={POST_MUTATION} variables={{ email, password }}
+              <Mutation mutation={SIGN_IN} variables={{ email, password }}
                 onCompleted={data => { handleCookie(data); Router.push('/'); }}
                 onError={(err) => setError(err.graphQLErrors[0].message)}>
                 {postMutation => <Button primary onClick={() => {

@@ -10,25 +10,13 @@ import Router from 'next/router'
 import gql from 'graphql-tag'
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import USER_QUERY from '../lib/queries/current_user';
+import CREATE_POST from '../lib/mutations/create_post';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
   padding-left: 5%;
   padding-right: 5%;
   min-height: 100vh;
-`;
-
-const POST_MUTATION = gql`
-  mutation CreatePost($title: String!, $url: String!, $description: String!) {
-    createLink(
-      url: $url,
-      description: $description,
-      title: $title
-    ) {
-      id
-      slug
-    }
-  }
 `;
 
 function Post() {
@@ -80,7 +68,7 @@ function Post() {
                 <TextArea id="description" name="description" placeholder="Description"
                   value={description}
                   onChange={event => setDescription(event.target.value)}/>
-              <Mutation mutation={POST_MUTATION} variables={{ title, url, description }}
+              <Mutation mutation={CREATE_POST} variables={{ title, url, description }}
                 onCompleted={data => Router.push(`/posts/${data.createLink.slug}`)}
                 onError={(err) => setError(err.graphQLErrors[0].message)}>
                 {postMutation => <Button primary onClick={postMutation}label="Create Post" style={{ marginTop: 40, marginBottom: 40 }}/>}

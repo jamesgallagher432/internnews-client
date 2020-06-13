@@ -13,132 +13,14 @@ import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import { timeDifferenceForDate } from '../../lib/utils'
 import Loading from '../../components/loading';
 import USER_QUERY from '../../lib/queries/current_user';
+import FEED_QUERY from '../../lib/queries/get_user_feed';
+import UPDATE_PROFILE from '../../lib/mutations/update_profile';
 
 const MainBox = styled(Box)`
   padding-top: 20px;
   padding-left: 5%;
   padding-right: 5%;
   min-height: 100vh;
-`;
-
-const FEED_QUERY = gql`
-  query Users($user: Int) {
-    allUsers(user: $user) {
-      id
-      username
-      email
-      about
-      createdAt
-      links {
-        id
-        title
-        slug
-        description
-        by {
-          id
-          username
-        }
-        comments {
-          id
-        }
-        upvotes {
-          id
-        }
-        createdAt
-      }
-      comments {
-        id
-        description
-        user {
-          id
-          username
-        }
-        link {
-          id
-          title
-        }
-        createdAt
-      }
-      upvotes {
-        id
-        link {
-          id
-          title
-          slug
-          description
-          by {
-            id
-            username
-          }
-          comments {
-            id
-          }
-          upvotes {
-            id
-          }
-          createdAt
-        }
-      }
-    }
-  }
-`;
-
-const UPDATE_PROFILE = gql`
-  mutation UpdateProfile($username: String!, $email: String!, $about: String!) {
-    updateProfile(username: $username, email: $email, about: $about) {
-      id
-      username
-      email
-      about
-      createdAt
-      links {
-        id
-        title
-        slug
-        description
-        by {
-          id
-          username
-        }
-        comments {
-          id
-        }
-        upvotes {
-          id
-        }
-        createdAt
-      }
-      comments {
-        id
-        description
-        user {
-          id
-          username
-        }
-        createdAt
-      }
-      upvotes {
-        id
-        link {
-          id
-          title
-          slug
-          description
-          by {
-            id
-            username
-          }
-          comments {
-            id
-          }
-          upvotes {
-            id
-          }
-          createdAt
-        }
-      }
-    }
-  }
 `;
 
 function Post() {
@@ -200,6 +82,7 @@ function Post() {
                           setEmail(currentUser.email)
                           setAbout(currentUser.about)
                         }
+
                         setLoaded(true)
 
                         if (parseInt(currentUser.id) === parseInt(router.query.id)) {
