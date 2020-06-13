@@ -1,7 +1,9 @@
 import React from 'react'
 import Link from 'next/link'
-import { Header, Box } from 'grommet'
+import { Header, Box, Anchor } from 'grommet'
 import styled from 'styled-components'
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
+import Router from 'next/router'
 
 const links = [
   { href: '/about', label: 'About'},
@@ -23,25 +25,40 @@ const RightDiv = styled(Box)`
   }
 `;
 
-const SpecialLink = styled.a`
+const SpecialLink = styled(Anchor)`
   color: black;
+  font-weight: 400;
+  margin-right: 20px;
 `;
 
-const Nav = () => (
-  <StyledHeader background="white">
-    <div direction="row">
-      <Link href='/'>
-        <SpecialLink>Intern News</SpecialLink>
-      </Link>
-    </div>
-    <RightDiv direction="row" gap="medium">
-      {links.map(({ key, href, label }) => (
-        <Link key={key} href={href}>
-          <SpecialLink>{label}</SpecialLink>
+function Nav({ user }) {
+  const cookies = parseCookies();
+
+  return (
+    <StyledHeader background="white">
+      <div direction="row">
+        <Link href='/'>
+          <SpecialLink>Intern News</SpecialLink>
         </Link>
-      ))}
-    </RightDiv>
-  </StyledHeader>
-)
+      </div>
+      <RightDiv direction="row" gap="medium">
+        {!user ? (
+          <div>
+            {links.map(({ key, href, label }) => (
+              <Link key={key} href={href}>
+                <SpecialLink>{label}</SpecialLink>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div gap="medium">
+            <Link href={`/users/${user.id}`}><SpecialLink>{user.username}</SpecialLink></Link>
+            <Anchor style={{ fontWeight: 400, color: "black" }} onClick={() => { destroyCookie(null, 'authentication'); Router.push('/') }}>Logout</Anchor>
+          </div>
+        )}
+      </RightDiv>
+    </StyledHeader>
+  )
+}
 
 export default Nav
