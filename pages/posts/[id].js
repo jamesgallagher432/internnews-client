@@ -13,7 +13,9 @@ import { parseCookies } from "nookies";
 import Loading from "../../components/loading";
 import USER_QUERY from "../../lib/queries/current_user";
 import CREATE_COMMENT from "../../lib/mutations/create_comment";
+import CREATE_COMMENT_REPLY from "../../lib/mutations/create_comment_reply";
 import FEED_QUERY from "../../lib/queries/get_feed";
+import { timeDifferenceForDate } from "../../lib/utils";
 
 const MainBox = styled(Box)`
   padding-top: 20px;
@@ -24,8 +26,14 @@ const MainBox = styled(Box)`
 
 function Post() {
   const router = useRouter();
+
   const [comment, setCommentValue] = React.useState("");
   const [commentError, setCommentError] = React.useState("");
+
+  const [replyComment, setReplyComment] = React.useState("");
+  const [replyCommentError, setReplyCommentError] = React.useState("");
+
+  const [showReply, setShowReply] = React.useState("");
 
   const cookies = parseCookies();
 
@@ -113,16 +121,79 @@ function Post() {
                   <Text>This post has no comments.</Text>
                 )}
                 {link.comments.map((comment) => {
-                  return (
-                    <div>
-                      <Anchor href={`/user/${comment.user.id}`} color="gray">
-                        {comment.user.username}
-                      </Anchor>{" "}
-                      1 day ago
-                      <br />
-                      {comment.description}
-                    </div>
-                  );
+                  if (comment.parent) {
+                    return null;
+                  } else {
+                    return (
+                      <Box>
+                        <div>
+                          <Anchor href={`/user/${comment.user.id}`} color="gray">
+                            {comment.user.username}
+                          </Anchor>{" "}
+                          1 day ago
+                          <br />
+                          {comment.description}
+                        </div>
+                        {comment.children.map((child) => {
+                          return (
+                              <div style={{ paddingLeft: "5%" }}>
+                                <Anchor href={`/user/${child.user.id}`} color="gray">
+                                  {child.user.username}
+                                </Anchor>{" "}
+                                {timeDifferenceForDate(child.createdAt)}
+                                <br />
+                                {child.description}
+                              </div>
+                          );
+                        })}
+                        <br />
+                        {cookies.authentication && (
+                          <div>
+                            <Anchor onClick={() => setShowReply(comment.id)}>Reply</Anchor>
+                            {showReply === comment.id && (
+                              <div>
+                                {replyCommentError && (
+                                  <Text color="red">
+                                    {replyCommentError}
+                                    <br />
+                                  </Text>
+                                )}
+                                <TextArea
+                                  placeholder="type here"
+                                  value={replyComment}
+                                  onChange={(event) => setReplyComment(event.target.value)}
+                                  style={{ width: "50%" }}
+                                /><br />
+                                  <Mutation
+                                    mutation={CREATE_COMMENT_REPLY}
+                                    variables={{
+                                      commentId: comment.id,
+                                      description: replyComment,
+                                    }}
+                                    onCompleted={(data) =>
+                                      Router.push(`/posts/${router.query.id}`)
+                                    }
+                                    onError={(err) =>
+                                      setReplyCommentError(err.graphQLErrors[0].message)
+                                    }
+                                  >
+                                    {(replyMutation) => (
+                                      <Button
+                                        primary
+                                        onClick={replyMutation}
+                                        color="accent-3"
+                                        label="Submit"
+                                        style={{ marginTop: 10, marginBottom: 10 }}
+                                      />
+                                    )}
+                                  </Mutation>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </Box>
+                    );
+                  }
                 })}
               </div>
             );
