@@ -13,7 +13,7 @@ import {
 import styled from "styled-components";
 import withApollo from "../lib/withApollo";
 import { Mutation } from "react-apollo";
-import { parseCookies, setCookie } from "nookies";
+import { setCookie } from "nookies";
 import Router from "next/router";
 import SIGN_IN from "../lib/mutations/sign_in_user";
 
@@ -101,7 +101,7 @@ function Home() {
             </Mutation>
           </Box>
           <Text>
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Anchor href="/register" color="gray">
               Register
             </Anchor>

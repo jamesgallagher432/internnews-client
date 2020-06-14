@@ -96,7 +96,7 @@ function Post() {
                       linkId: data.allLinks[0].id,
                       description: comment,
                     }}
-                    onCompleted={(data) =>
+                    onCompleted={() =>
                       Router.push(`/posts/${router.query.id}`)
                     }
                     onError={(err) =>
@@ -136,7 +136,7 @@ function Post() {
                         </div>
                         {comment.children.map((child) => {
                           return (
-                              <div style={{ paddingLeft: "5%" }}>
+                              <div style={{ paddingLeft: "5%" }} key={child.id}>
                                 <Anchor href={`/user/${child.user.id}`} color="gray">
                                   {child.user.username}
                                 </Anchor>{" "}
@@ -170,7 +170,7 @@ function Post() {
                                       commentId: comment.id,
                                       description: replyComment,
                                     }}
-                                    onCompleted={(data) =>
+                                    onCompleted={() =>
                                       Router.push(`/posts/${router.query.id}`)
                                     }
                                     onError={(err) =>

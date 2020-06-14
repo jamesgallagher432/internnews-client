@@ -5,11 +5,10 @@ import { Mutation } from "react-apollo";
 import { timeDifferenceForDate } from "../lib/utils";
 import CREATE_VOTE from "../lib/mutations/create_vote";
 import DELETE_LINK from "../lib/mutations/delete_link";
+import PropTypes from 'prop-types';
 
 class Link extends Component {
   render() {
-    console.log(this.props.link.by.id === this.props.user.id)
-    console.log(this.props.user.isAdmin === true)
     return (
       <div>
         <div style={{ paddingTop: 10, paddingBottom: 10 }}>
@@ -67,5 +66,11 @@ class Link extends Component {
     );
   }
 }
+
+
+Link.propTypes = {
+  link: PropTypes.string,
+  user: PropTypes.string
+};
 
 export default withApollo(Link);

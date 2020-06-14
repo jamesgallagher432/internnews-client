@@ -163,7 +163,7 @@ function Post() {
                                     oldPassword: old_password,
                                     newPassword: new_password,
                                   }}
-                                  onCompleted={(data) => {
+                                  onCompleted={() => {
                                     setPasswordError(null);
                                     completeReset(true);
                                   }}
@@ -225,7 +225,7 @@ function Post() {
                             <Mutation
                               mutation={UPDATE_PROFILE}
                               variables={{ username, email, about }}
-                              onCompleted={(data) => setQueryError(null)}
+                              onCompleted={() => setQueryError(null)}
                               onError={(err) =>
                                 setQueryError(err.graphQLErrors[0].message)
                               }
@@ -270,7 +270,7 @@ function Post() {
                         </Tab>
                         <Tab title="Comments" style={{ paddingBottom: 10 }}>
                           {user.comments.map((comment) => (
-                            <div>
+                            <div key={comment.id}>
                               <Anchor
                                 href={`/user/${comment.user.id}`}
                                 color="gray"
@@ -291,7 +291,7 @@ function Post() {
                         </Tab>
                         <Tab title="Votes" style={{ paddingBottom: 10 }}>
                           {user.upvotes.map((upvote) => (
-                            <Link link={upvote.link} user={currentUser} />
+                            <Link link={upvote.link} user={currentUser} key={upvote.id} />
                           ))}
                         </Tab>
                       </Tabs>

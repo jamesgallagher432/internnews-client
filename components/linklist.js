@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Link from "../components/link";
-import { Box, Text, Anchor } from "grommet";
-import styled from "styled-components";
+import { Text, Anchor } from "grommet";
 import { Query } from "react-apollo";
 import withApollo from "../lib/withApollo";
 import Loading from "./loading";
@@ -38,7 +37,7 @@ function LinkList() {
         </Anchor>
       </div>
         <Query query={CURRENT_USER}>
-          {({ loading, error, data }) => {
+          {({ loading, data }) => {
             if (loading) return <Loading />;
 
             const currentUser = data.currentUser[0];

@@ -2,8 +2,9 @@ import React from "react";
 import Link from "next/link";
 import { Header, Box, Anchor } from "grommet";
 import styled from "styled-components";
-import { parseCookies, destroyCookie } from "nookies";
+import { destroyCookie } from "nookies";
 import Router from "next/router";
+import PropTypes from 'prop-types';
 
 const StyledHeader = styled(Header)`
   padding: 20px;
@@ -73,5 +74,10 @@ function Nav({ user }) {
     </StyledHeader>
   );
 }
+
+
+Link.propTypes = {
+  user: PropTypes.string
+};
 
 export default Nav;

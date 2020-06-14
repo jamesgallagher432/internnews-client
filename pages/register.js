@@ -84,7 +84,7 @@ function Home() {
             <Mutation
               mutation={SIGN_UP}
               variables={{ username, email, password }}
-              onCompleted={(data) => Router.push("/login")}
+              onCompleted={() => Router.push("/login")}
               onError={(err) => setError(err.graphQLErrors[0].message)}
             >
               {(postMutation) => (
