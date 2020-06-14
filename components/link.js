@@ -8,6 +8,8 @@ import DELETE_LINK from "../lib/mutations/delete_link";
 
 class Link extends Component {
   render() {
+    console.log(this.props.link.by.id === this.props.user.id)
+    console.log(this.props.user.isAdmin === true)
     return (
       <div>
         <div style={{ paddingTop: 10, paddingBottom: 10 }}>
@@ -44,10 +46,10 @@ class Link extends Component {
               {this.props.link.by.username} &nbsp;
             </Anchor>{" "}
             {timeDifferenceForDate(this.props.link.createdAt)}{" "}&nbsp;
-            <strong>{this.props.link.comments.length} comments &nbsp;</strong>{" "}
+            <strong><Anchor href={`/posts/${this.props.link.slug}`} color="black">{this.props.link.comments.length} comments &nbsp;</Anchor></strong>{" "}
             {this.props.user && (
               <div>
-                {this.props.link.by.id === this.props.user.id && (
+                {(this.props.link.by.id === this.props.user.id || this.props.user.isAdmin === true) && (
                   <Mutation
                     mutation={DELETE_LINK}
                     variables={{ linkId: this.props.link.id }}
