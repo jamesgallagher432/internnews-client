@@ -28,7 +28,7 @@ function Nav({ user }) {
     <StyledHeader background="white">
       <div direction="row">
         <Link href="/">
-          <Anchor style={{ marginRight: 20 }} color="blue">Intern News</Anchor>
+          <Anchor style={{ marginRight: 20 }}>Intern News</Anchor>
         </Link>
         {user && (
           <Link href={`/about`}>
